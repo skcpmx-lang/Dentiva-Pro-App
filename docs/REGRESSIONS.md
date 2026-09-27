@@ -13,3 +13,9 @@
 - Fix: raw Rust SQL string preserves SQLite's one-character escape. Search inputs still escape backslash, percent and underscore as literal characters and bind parameters.
 - Regression: real native patient roundtrip/emergency-phone search and metacharacter search tests; added literal backslash alongside percent, underscore and SQL-injection-shaped text.
 - Evidence: failure captured in GitHub Checks API `Native test evidence (Linux)` for run 36298965278. Both platforms must pass the rerun; not waived because Python-only schema tests passed.
+
+## TEST-001 — Windows monotonic-clock underflow in expiry fixture
+- Discovery: Windows Actions run 36299210737, 17/18 native tests passed; Linux 18/18 passed.
+- Root cause: the fixture subtracted 601 seconds from `Instant::now()`. On a newly booted Windows runner the monotonic clock had less than that uptime, and the test panicked before calling authorization.
+- Fix: set the private test session's idle duration to zero, then assert native authorization expires it. Production policy remains validated at 5/10/15/30 minutes; no production clock or authentication bypass was added.
+- Regression: same native revocation/expiry test on both actual runner operating systems. Never classify the Windows failure as a skip or a product PASS before rerun.

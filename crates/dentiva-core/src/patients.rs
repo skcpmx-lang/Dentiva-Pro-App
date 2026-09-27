@@ -186,7 +186,7 @@ impl App {
             .replace('%', "\\%")
             .replace('_', "\\_");
         let pattern = format!("%{escaped}%");
-        let filter=r"WHERE p.status='Active' AND (?1='' OR p.name LIKE ?2 ESCAPE '\' OR p.code LIKE ?2 ESCAPE '\' OR p.address LIKE ?2 ESCAPE '\' OR EXISTS(SELECT 1 FROM patient_contacts c WHERE c.patient_id=p.id AND c.phone LIKE ?2 ESCAPE '\')) AND (?3 IS NULL OR p.registered_at>=?3) AND (?4 IS NULL OR p.registered_at<?4)";
+        let filter = r"WHERE p.status='Active' AND (?1='' OR p.name LIKE ?2 ESCAPE '\' OR p.code LIKE ?2 ESCAPE '\' OR p.address LIKE ?2 ESCAPE '\' OR EXISTS(SELECT 1 FROM patient_contacts c WHERE c.patient_id=p.id AND c.phone LIKE ?2 ESCAPE '\')) AND (?3 IS NULL OR p.registered_at>=?3) AND (?4 IS NULL OR p.registered_at<?4)";
         let total = self.conn.query_row(
             &format!("SELECT COUNT(*) FROM patients p {filter}"),
             params![search, pattern, from, until],

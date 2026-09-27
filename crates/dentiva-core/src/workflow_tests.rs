@@ -291,7 +291,7 @@ fn role_revocation_and_idle_expiry_take_effect_natively() {
         error::Error::Forbidden
     );
     let session = app.session.as_mut().unwrap();
-    session.activity = std::time::Instant::now() - std::time::Duration::from_secs(601);
+    session.idle = std::time::Duration::ZERO;
     assert!(matches!(
         app.patients(
             &token,
@@ -342,35 +342,121 @@ fn date_ranges_and_search_metacharacters_are_literal() {
 #[test]
 fn custom_permissions_are_audited_and_cannot_escalate() {
     let (_dir, mut app, token) = clinic();
-    let role = app.create_role(&token, "Limited coordinator", vec!["patients.view".into(), "roles.manage".into(), "users.manage".into()]).unwrap();
-    app.create_user(&token, auth::NewUser { username: "limited".into(), full_name: "Limited user".into(), password: "private limited fixture".into(), role_id: role.clone() }).unwrap();
-    assert!(app.replace_role_permissions(&token, "owner", vec![]).is_err());
+    let role = app
+        .create_role(
+            &token,
+            "Limited coordinator",
+            vec![
+                "patients.view".into(),
+                "roles.manage".into(),
+                "users.manage".into(),
+            ],
+        )
+        .unwrap();
+    app.create_user(
+        &token,
+        auth::NewUser {
+            username: "limited".into(),
+            full_name: "Limited user".into(),
+            password: "private limited fixture".into(),
+            role_id: role.clone(),
+        },
+    )
+    .unwrap();
+    assert!(app
+        .replace_role_permissions(&token, "owner", vec![])
+        .is_err());
     app.logout(&token).unwrap();
-    let limited = app.login("limited", "private limited fixture").unwrap().token;
-    assert_eq!(app.create_role(&limited, "Escalation", vec!["invoices.view".into()]).unwrap_err(), error::Error::Forbidden);
-    assert_eq!(app.create_user(&limited, auth::NewUser { username: "new-owner".into(), full_name: "Escalation".into(), password: "private other fixture".into(), role_id: "owner".into() }).unwrap_err(), error::Error::Forbidden);
-    assert_eq!(app.replace_role_permissions(&limited, "accountant", vec![]), Err(error::Error::Forbidden));
-    app.replace_role_permissions(&limited, &role, vec!["patients.view".into()]).unwrap();
-    assert!(matches!(app.roles(&limited), Err(error::Error::Unauthenticated)));
+    let limited = app
+        .login("limited", "private limited fixture")
+        .unwrap()
+        .token;
+    assert_eq!(
+        app.create_role(&limited, "Escalation", vec!["invoices.view".into()])
+            .unwrap_err(),
+        error::Error::Forbidden
+    );
+    assert_eq!(
+        app.create_user(
+            &limited,
+            auth::NewUser {
+                username: "new-owner".into(),
+                full_name: "Escalation".into(),
+                password: "private other fixture".into(),
+                role_id: "owner".into()
+            }
+        )
+        .unwrap_err(),
+        error::Error::Forbidden
+    );
+    assert_eq!(
+        app.replace_role_permissions(&limited, "accountant", vec![]),
+        Err(error::Error::Forbidden)
+    );
+    app.replace_role_permissions(&limited, &role, vec!["patients.view".into()])
+        .unwrap();
+    assert!(matches!(
+        app.roles(&limited),
+        Err(error::Error::Unauthenticated)
+    ));
     let summary: String = app.conn.query_row("SELECT summary FROM audit_logs WHERE action='role.permissions_changed' AND entity_id=?1", [&role], |row| row.get(0)).unwrap();
-    assert!(summary.contains("before") && summary.contains("after") && summary.contains("roles.manage"));
+    assert!(
+        summary.contains("before") && summary.contains("after") && summary.contains("roles.manage")
+    );
 }
 
 #[test]
 fn financial_mutations_reject_reception_direct_calls_before_validation() {
     let (_dir, mut app, token) = clinic();
-    app.create_user(&token, auth::NewUser { username: "reception".into(), full_name: "Reception".into(), password: "private reception fixture".into(), role_id: "receptionist".into() }).unwrap();
+    app.create_user(
+        &token,
+        auth::NewUser {
+            username: "reception".into(),
+            full_name: "Reception".into(),
+            password: "private reception fixture".into(),
+            role_id: "receptionist".into(),
+        },
+    )
+    .unwrap();
     app.logout(&token).unwrap();
-    let reception = app.login("reception", "private reception fixture").unwrap().token;
-    assert_eq!(app.create_invoice(&reception, invoice("guessed-id", "invalid-key")).unwrap_err(), error::Error::Forbidden);
-    assert_eq!(app.record_payment(&reception, payment("guessed-patient", "guessed-invoice", 1)), Err(error::Error::Forbidden));
-    assert_eq!(app.conn.query_row("SELECT COUNT(*) FROM invoices", [], |r|r.get::<_,i64>(0)).unwrap(), 0);
-    assert_eq!(app.conn.query_row("SELECT COUNT(*) FROM payments", [], |r|r.get::<_,i64>(0)).unwrap(), 0);
+    let reception = app
+        .login("reception", "private reception fixture")
+        .unwrap()
+        .token;
+    assert_eq!(
+        app.create_invoice(&reception, invoice("guessed-id", "invalid-key"))
+            .unwrap_err(),
+        error::Error::Forbidden
+    );
+    assert_eq!(
+        app.record_payment(&reception, payment("guessed-patient", "guessed-invoice", 1)),
+        Err(error::Error::Forbidden)
+    );
+    assert_eq!(
+        app.conn
+            .query_row("SELECT COUNT(*) FROM invoices", [], |r| r.get::<_, i64>(0))
+            .unwrap(),
+        0
+    );
+    assert_eq!(
+        app.conn
+            .query_row("SELECT COUNT(*) FROM payments", [], |r| r.get::<_, i64>(0))
+            .unwrap(),
+        0
+    );
 }
 
 #[test]
 fn account_auth_version_revokes_existing_session() {
     let (_dir, mut app, token) = clinic();
-    app.conn.execute("UPDATE users SET auth_version=auth_version+1 WHERE username='owner'", []).unwrap();
-    assert!(matches!(app.roles(&token), Err(error::Error::Unauthenticated)));
+    app.conn
+        .execute(
+            "UPDATE users SET auth_version=auth_version+1 WHERE username='owner'",
+            [],
+        )
+        .unwrap();
+    assert!(matches!(
+        app.roles(&token),
+        Err(error::Error::Unauthenticated)
+    ));
 }

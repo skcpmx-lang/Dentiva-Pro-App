@@ -1,28 +1,59 @@
 # Dentiva Pro — resumable engineering checkpoint
 
 Updated: 2026-09-27 UTC. Branch: `arena/01a0e166-dentiva-pro-app`.
-Target commercial release: 1.0.0. **Release readiness: BLOCKED — not a completed product.**
+Target commercial release: 1.0.0. Current native crate: 0.1.0.
+**Release readiness: BLOCKED — the requested complete application is NOT delivered.**
 
 ## Completed phases
-- Inspected empty repository at 702d220 (README only), confirmed session branch and connected GitHub repository.
-- Established Tauri 2 / React + TypeScript / native Rust / relational SQLite architecture and native authorization boundary.
-- Wrote architecture, full entity/schema specification, permission matrix, screen/component design, print/PDF, backup/recovery, security, testing, acceptance matrix and release policy BEFORE production implementation.
-- Cross-checked all 147 master sections in REQUIREMENTS_TRACEABILITY.md. All functional acceptance groups start NOT RUN.
+1. Inspected initial repository 702d220 (README only); confirmed branch/GitHub access.
+2. Wrote architecture, full entity/schema specification, role matrix, screen/component specification, printing/PDF, backup/recovery, security, test strategy, acceptance and release policy BEFORE implementation.
+3. Cross-checked all 147 master sections in REQUIREMENTS_TRACEABILITY.md. Full product acceptance groups remain NOT RUN.
+4. Implemented a real Rust/SQLite foundation (not yet a desktop application):
+   - Checksum-validated migration v1; foreign keys, WAL/FULL durability, integrity checks, indexed relational tables, refusal of changed/newer schemas.
+   - Isolated derived activation verifier. **Device receipt, one-time persistence and rate limiting coordinator remain absent.**
+   - Atomic initial clinic/owner/dentists/designations setup primitive with validated Argon2id passwords. **Not the complete ten-step wizard/preferences.**
+   - Native in-memory sessions, monotonic idle/absolute expiry, manual lock/logout, persisted user failures/backoff, active-user/grant checks below UI.
+   - Demographic patient create/detail/bounded list/UTC filtering/literal search/contacts/archive; separately authorized append-only medical notes.
+   - Decimal-safe invoice line calculations, immutable price snapshots, posting seal, atomic optional initial payment, same-patient allocation constraints, overpayment rejection, idempotent financial writes and audit.
+   - Custom role delegation, explicit permission sets, owner protection, before/after grant audit and immediate auth-version session invalidation.
+   - Fail-closed release-evidence validator that rejects incomplete scope, stale source, skipped tests, changed evidence and nonexistent/non-PE installer files.
+5. Pushed source and CI only to the fixed session branch. GitHub-hosted Linux and Windows compile/test execution works; Cargo.lock and rustfmt output retrieved through a controlled same-branch bootstrap commit.
 
 ## Current phase
-Implement and verify foundational native persistence/authentication/business invariants before connecting renderer. Do not mistake engineering source/version 0.1.0 for commercial release.
+Finish native foundation regression/format validation after the Windows expiry-fixture correction following commit 525ca59 and document its exact results. Then continue production implementation per specs, starting with secure Windows installation/receipt/encryption coordinator and the complete setup/auth Tauri boundary, rather than inventing a browser-only backend.
 
-## Remaining mandatory scope
-All production implementation and full master acceptance. Track evidence per requirement; no feature removed by being unimplemented. Native activation/ten-step setup, auth/lock, patients/profile/timeline, clinical/chart/referrals/visits, appointments/queue, prescriptions and print/PDF/Bengali, invoices/payments, inventory/accounting, staff/RBAC/settings, search/notifications, files/logos, recovery/backup/scheduler, shell/a11y, audits/reports/export, encryption, Windows offline installer/icon/runtime, all testing/performance/QA and final release publication.
+## Verified checks so far
+- Local Python: 14 real migration/SQLite integration tests PASS, including forced child-process termination before commit, immutable posted documents, cross-patient/overpayment/FK rejection, rollback and WAL snapshot.
+- Local Python: 6 release-gate validator unit tests PASS.
+- Native CI: Rust compilation and clippy `-D warnings` passed on Linux and Windows for prior revisions.
+- Native 15-test suite initially 13 PASS / 2 FAIL; diagnosed and fixed Rust/SQLite search escaping. Linux rerun on 2c94b4b: 15 PASS. Expanded suite at 525ca59: Linux 18/18 PASS; Windows 17/18 with monotonic-uptime test-fixture underflow. Fixture corrected using zero idle duration, formatter patch applied; final rerun pending.
+- No frontend, Tauri shell, installer or actual printer testing has been executed or claimed.
 
-## Environment / limitations
-Linux authoring environment initially has Node 22 and Python 3.11, no Rust toolchain or Windows UI/hardware. GitHub CLI repository access confirmed. Rust toolchain installation and portable checks are next. Clean Windows/physical printer/DPI evidence cannot be manufactured from Linux tests.
+## Defects / fixes
+- FIN-001: zero-value invoice line could be appended after posting. Added immutable posting seal, aggregate-sum validation, post-seal insert rejection, allocation FK to posting and regression tests.
+- PAT-001: Rust string escaping consumed SQLite ESCAPE backslash. Raw SQL string fix, plain/emergency-phone/literal metacharacter regressions. See REGRESSIONS.md.
+- Windows-only expiry fixture subtracted 601s from a fresh monotonic clock; corrected to test the native expiry boundary without uptime assumptions. Formatter patch applied from CI; verification pending.
 
-## Failing tests / known issues
-No tests existed at inspection; none executed yet. No installer/release artifact exists. Fixed offline activation and privileged local OS threat limitations documented. Restore multiple-files ambiguity resolved as validate/catalog many, apply one complete snapshot without merging.
+## Mandatory unimplemented / unverified scope
+The following is remaining contractual work, NOT a deferred product roadmap:
+- React/TypeScript application, Tauri 2 shell/IPC/capabilities/CSP, all premium UI screens, shared controls and accessibility. No browser demo has been substituted.
+- Complete activation receipt/reset/device binding and ten-step setup; SQLCipher/DPAPI/attachment encryption/Windows ACLs; OS suspend/lock integration; policy/session persistence and recovery.
+- Complete patient fields/edit/duplicate warnings/profile/unified timeline, visit/treatment/referral/chart, adult/primary dental history, appointments and queue.
+- Prescription/medicine catalog, all print engine/templates/profiles/PDF, locally licensed Bengali font shaping and real Windows printer failure support.
+- Full billing permissions/discount/tax settings/statuses/reversals, payment module/reports/date ranges, inventory/suppliers/batches/stock alerts, accounting, staff-sensitive fields.
+- Full users/roles management UI, per-user grant overrides, field-level permissions across all remaining modules, settings, global search/notifications/dashboard/export/reports/audit viewer.
+- Managed files/logo uploads/previews/journal; consistent encrypted attachment-inclusive backup, scheduler, multi-file restore catalog, verified pre-restore backup and crash-safe generation recovery.
+- Full migrations for remaining entities; large-data performance, all crashes/destructive/error tests, UI/native E2E, physical printer/PDF/Bengali/DPI/clean-machine verification.
+- Dependency/advisory/license inventories + notices, original app icon, offline WebView2 Windows candidate installer, release workflow/signing/version/tag/artifact checks, final GitHub release or REAL /dist fallback.
+
+## Environment / evidence access
+Linux authoring environment has Node/Python, but direct Rust/crates/apt download hosts return TLS failures. GitHub push/read and push-triggered Actions work. Workflow dispatch and repository Actions-permission admin API return integration 403; do not ask for tokens/passwords. Artifact/log CDN hosts also return EOF from this sandbox, so native test transcripts and formatter patches are published through GitHub Checks API. Pin toolchain 1.94.0; exact dependencies in Cargo.lock. Local toolchain is still absent; no native local compile claim.
 
 ## Last successful build / test
-None. No executable has been built or claimed. No release tag or publication attempted before gates.
+Native compile/clippy: GitHub Actions on both Linux and Windows, see runs for 2c94b4b and later checkpoint updates. Tests: local Python 20/20; native latest expanded rerun pending. A core library build is NOT an application/installer build. No release tag, EXE, GitHub release or /dist fallback exists.
 
-## Resume
-Read this file, git status/log, specs and actual test/build outputs. Continue from the exact current phase. Keep this branch, preserve working source, update after meaningful verified milestones. All pending work is release-blocking, not a deferred commercial roadmap.
+## Resume precisely
+1. Inspect git status/log/branch and latest Actions runs/check-run output for 525ca59 or later.
+2. Retrieve formatter patch with Checks API (artifact CDN unavailable), apply with `git apply --check`, fix any native test/lint findings; push this same branch and rerun.
+3. Update QA_REPORT.md and this file with actual green source hash and counts.
+4. Continue remaining implementation above in spec order, with regressions and real native tests. Do not restart completed foundation, remove required scope, or publish a final artifact while gates are blocked.
