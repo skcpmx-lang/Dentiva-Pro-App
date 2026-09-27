@@ -4,23 +4,31 @@ on:
     branches: [arena/01a0e166-dentiva-pro-app]
   pull_request:
   workflow_dispatch:
+    inputs:
+      bootstrap_lockfile:
+        description: Commit initial lockfile and rustfmt output on the session branch
+        type: boolean
+        default: false
 permissions:
   contents: read
+  checks: write
 jobs:
   core:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-24.04, windows-2025]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - name: Install pinned toolchain
         run: rustup toolchain install 1.94.0 --profile minimal --component rustfmt --component clippy
       - name: Resolve initial lockfile when absent
         shell: bash
         run: |
           if [ ! -f Cargo.lock ]; then cargo generate-lockfile; fi
+      - name: Production migration constraints
+        run: python -m unittest discover -s tests/integration -v
       - name: Check formatting
         id: format
         continue-on-error: true
@@ -28,20 +36,50 @@ jobs:
       - name: Compile and lint native core
         run: cargo clippy --locked --all-targets -- -D warnings
       - name: Unit and database integration tests
-        run: cargo test --locked --all-targets
+        id: tests
+        shell: bash
+        run: |
+          set -o pipefail
+          cargo test --locked --all-targets 2>&1 | tee native-tests.log
+      - name: Publish native test transcript through Checks API
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEST_OUTCOME: ${{ steps.tests.outcome }}
+        run: python scripts/publish_ci_evidence.py
       - name: Capture bootstrap lockfile and formatter patch
         if: always()
         shell: bash
         run: |
           mkdir -p ci-evidence
           if [ -f Cargo.lock ]; then cp Cargo.lock ci-evidence/; fi
+          if [ -f native-tests.log ]; then cp native-tests.log ci-evidence/; fi
           cargo fmt --all
           git diff -- crates > ci-evidence/rustfmt.patch
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         if: always()
         with:
           name: native-evidence-${{ matrix.os }}
           path: ci-evidence/
       - name: Enforce formatter result
-        if: steps.format.outcome == 'failure'
+        if: always() && steps.format.outcome != 'success'
         run: exit 1
+  bootstrap:
+    if: github.event_name == 'workflow_dispatch' && inputs.bootstrap_lockfile && github.ref == 'refs/heads/arena/01a0e166-dentiva-pro-app'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Generate deterministic engineering bootstrap
+        run: |
+          rustup toolchain install 1.94.0 --profile minimal --component rustfmt
+          cargo generate-lockfile
+          cargo fmt --all
+          git config user.name "Dentiva engineering checks"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Cargo.lock crates/dentiva-core
+          if ! git diff --cached --quiet; then
+            git commit -m "Lock native dependencies and apply rustfmt"
+            git push origin HEAD:arena/01a0e166-dentiva-pro-app
+          fi

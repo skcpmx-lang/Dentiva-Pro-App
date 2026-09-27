@@ -91,6 +91,7 @@ impl App {
             let amounts=calculate_line(line)?;
             tx.execute("INSERT INTO invoice_items VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9)",params![uuid::Uuid::new_v4().to_string(),id,ordinal as i64,line.description,line.quantity_milli,line.unit_price_poisha,line.discount_poisha,line.tax_basis_points,amounts.total_poisha])?;
         }
+        tx.execute("INSERT INTO invoice_postings VALUES(?1,?2)",params![id,now()])?;
         if let Some(payment)=input.initial_payment {
             insert_payment(&tx,&actor,&PaymentInput {patient_id:input.patient_id,invoice_id:id.clone(),amount_poisha:payment.amount_poisha,method:payment.method,reference:payment.reference,notes:String::new(),request_key:format!("initial:{}",input.request_key)})?;
         }

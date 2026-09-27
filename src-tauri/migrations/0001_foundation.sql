@@ -123,6 +123,20 @@ CREATE TABLE invoice_items (
     total_poisha INTEGER NOT NULL CHECK(total_poisha BETWEEN 0 AND 9000000000000),
     UNIQUE(invoice_id,ordinal)
 ) STRICT;
+CREATE TABLE invoice_postings (
+    invoice_id TEXT PRIMARY KEY REFERENCES invoices(id) ON DELETE RESTRICT,
+    posted_at TEXT NOT NULL
+) STRICT;
+CREATE TRIGGER posting_requires_complete_items BEFORE INSERT ON invoice_postings BEGIN
+    SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM invoice_items WHERE invoice_id=NEW.invoice_id)
+        OR (SELECT SUM(total_poisha) FROM invoice_items WHERE invoice_id=NEW.invoice_id) != (SELECT total_poisha FROM invoices WHERE id=NEW.invoice_id)
+        THEN RAISE(ABORT,'invoice items incomplete') END;
+END;
+CREATE TRIGGER posting_no_update BEFORE UPDATE ON invoice_postings BEGIN SELECT RAISE(ABORT,'posting immutable'); END;
+CREATE TRIGGER posting_no_delete BEFORE DELETE ON invoice_postings BEGIN SELECT RAISE(ABORT,'posting immutable'); END;
+CREATE TRIGGER item_no_append_after_posting BEFORE INSERT ON invoice_items
+WHEN EXISTS(SELECT 1 FROM invoice_postings WHERE invoice_id=NEW.invoice_id)
+BEGIN SELECT RAISE(ABORT,'posted invoice items sealed'); END;
 CREATE TABLE payments (
     id TEXT PRIMARY KEY,
     patient_id TEXT NOT NULL REFERENCES patients(id) ON DELETE RESTRICT,
@@ -141,7 +155,7 @@ CREATE INDEX idx_payments_date ON payments(received_at DESC,method);
 CREATE INDEX idx_payments_actor ON payments(created_by);
 CREATE TABLE payment_allocations (
     payment_id TEXT NOT NULL,
-    invoice_id TEXT NOT NULL,
+    invoice_id TEXT NOT NULL REFERENCES invoice_postings(invoice_id) ON DELETE RESTRICT,
     patient_id TEXT NOT NULL REFERENCES patients(id) ON DELETE RESTRICT,
     amount_poisha INTEGER NOT NULL CHECK(amount_poisha>0),
     PRIMARY KEY(payment_id,invoice_id),

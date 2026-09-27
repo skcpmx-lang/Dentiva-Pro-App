@@ -30,6 +30,8 @@ class SchemaTests(unittest.TestCase):
 
     def invoice(self, ident='i', patient='p', amount=10000):
         self.db.execute("INSERT INTO invoices(id,number,patient_id,issued_at,total_poisha,request_key,request_digest,created_by) VALUES(?,?,?,'2026-09-27T00:00:00.000Z',?,?,?,'u')", (ident, ident, patient, amount, ident, ident))
+        self.db.execute("INSERT INTO invoice_items VALUES(?,?,0,'Snapshot',1000,?,0,0,?)", ('line-' + ident, ident, amount, amount))
+        self.db.execute("INSERT INTO invoice_postings VALUES(?,'2026-09-27T00:00:00.000Z')", (ident,))
 
     def payment(self, ident='pay', patient='p', amount=10000):
         self.db.execute("INSERT INTO payments(id,patient_id,amount_poisha,method,received_at,request_key,request_digest,created_by) VALUES(?,?,?,'Cash','2026-09-27T00:00:00.000Z',?,?,'u')", (ident, patient, amount, ident, ident))
@@ -97,11 +99,26 @@ class SchemaTests(unittest.TestCase):
 
     def test_extra_line_cannot_change_finalized_total(self):
         self.invoice()
-        self.db.execute("INSERT INTO invoice_items VALUES('l','i',0,'Saved price',1000,10000,0,0,10000)")
         with self.assertRaises(sqlite3.IntegrityError):
             self.db.execute("INSERT INTO invoice_items VALUES('l2','i',1,'Extra',1000,1,0,0,1)")
         with self.assertRaises(sqlite3.IntegrityError):
             self.db.execute('DELETE FROM invoice_items')
+
+    def test_zero_value_line_cannot_be_appended_after_posting(self):
+        self.invoice()
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.db.execute("INSERT INTO invoice_items VALUES('zero','i',1,'Unauthorized note',1000,0,0,0,0)")
+
+    def test_posting_rejects_missing_or_incomplete_items(self):
+        self.db.execute("INSERT INTO invoices(id,number,patient_id,issued_at,total_poisha,request_key,request_digest,created_by) VALUES('unsealed','unsealed','p','date',100,'unsealed','digest','u')")
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.db.execute("INSERT INTO invoice_postings VALUES('unsealed','date')")
+        self.db.execute("INSERT INTO invoice_items VALUES('short','unsealed',0,'Item',1000,50,0,0,50)")
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.db.execute("INSERT INTO invoice_postings VALUES('unsealed','date')")
+        self.payment()
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.db.execute("INSERT INTO payment_allocations VALUES('pay','unsealed','p',1)")
 
     def test_transaction_failure_rolls_back_all_financial_rows(self):
         try:
