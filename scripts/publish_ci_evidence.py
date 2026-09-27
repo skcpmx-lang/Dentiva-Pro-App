@@ -4,17 +4,19 @@ import os
 from pathlib import Path
 from urllib.request import Request, urlopen
 
-log_path = Path('native-tests.log')
+log_path = Path(os.environ.get('EVIDENCE_FILE', 'native-tests.log'))
 log = log_path.read_text(encoding='utf-8', errors='replace') if log_path.exists() else 'Native tests did not execute; consult preceding build steps.'
 result = os.environ.get('TEST_OUTCOME', 'skipped')
+name = os.environ.get('EVIDENCE_NAME', 'Native test evidence')
 payload = {
-    'name': f"Native test evidence ({os.environ['RUNNER_OS']})",
+    'name': f"{name} ({os.environ['RUNNER_OS']})",
     'head_sha': os.environ['GITHUB_SHA'],
     'status': 'completed',
     'conclusion': 'success' if result == 'success' else 'failure',
     'output': {
-        'title': f'Native test execution: {result}',
-        'summary': 'Engineering evidence only, not commercial release certification.\n\n```text\n' + log[-58000:] + '\n```',
+        'title': f'{name}: {result}',
+        'summary': 'Engineering evidence only, not commercial release certification.',
+        'text': log[-58000:],
     },
 }
 request = Request(

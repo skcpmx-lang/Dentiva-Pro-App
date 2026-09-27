@@ -1,6 +1,8 @@
 """Real SQLite tests of the production migration, no substitute app implementation."""
 from pathlib import Path
 import sqlite3
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -137,6 +139,28 @@ class SchemaTests(unittest.TestCase):
         self.db = sqlite3.connect(self.path)
         self.db.execute('PRAGMA foreign_keys=ON')
         self.assertEqual(self.db.execute('SELECT COUNT(*) FROM invoices').fetchone()[0], 0)
+        self.assertEqual(self.db.execute('PRAGMA integrity_check').fetchone()[0], 'ok')
+
+    def test_forced_process_termination_rolls_back_financial_write(self):
+        code = """
+import sqlite3, sys, time
+conn = sqlite3.connect(sys.argv[1])
+conn.execute('PRAGMA foreign_keys=ON')
+conn.execute('BEGIN IMMEDIATE')
+conn.execute("INSERT INTO invoices(id,number,patient_id,issued_at,total_poisha,request_key,request_digest,created_by) VALUES('crash','crash','p','date',100,'crash','digest','u')")
+print('write pending', flush=True)
+time.sleep(300)
+"""
+        child = subprocess.Popen([sys.executable, '-c', code, str(self.path)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        try:
+            self.assertEqual(child.stdout.readline().strip(), 'write pending')
+            child.kill()
+            child.communicate(timeout=10)
+        finally:
+            if child.poll() is None:
+                child.kill()
+                child.communicate(timeout=10)
+        self.assertEqual(self.db.execute("SELECT COUNT(*) FROM invoices WHERE id='crash'").fetchone()[0], 0)
         self.assertEqual(self.db.execute('PRAGMA integrity_check').fetchone()[0], 'ok')
 
     def test_online_snapshot_includes_committed_wal(self):

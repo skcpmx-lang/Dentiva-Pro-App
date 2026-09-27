@@ -7,6 +7,7 @@ pub mod error;
 pub mod finance;
 pub mod money;
 pub mod patients;
+pub mod roles;
 pub mod setup;
 mod validation;
 

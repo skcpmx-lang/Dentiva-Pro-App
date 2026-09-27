@@ -51,6 +51,14 @@ jobs:
           if [ -f native-tests.log ]; then cp native-tests.log ci-evidence/; fi
           cargo fmt --all
           git diff -- crates > ci-evidence/rustfmt.patch
+      - name: Publish formatter patch through Checks API
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEST_OUTCOME: ${{ steps.format.outcome }}
+          EVIDENCE_FILE: ci-evidence/rustfmt.patch
+          EVIDENCE_NAME: Formatter evidence
+        run: python scripts/publish_ci_evidence.py
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         if: always()
         with:
