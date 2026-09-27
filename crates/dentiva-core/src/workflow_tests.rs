@@ -310,7 +310,7 @@ fn role_revocation_and_idle_expiry_take_effect_natively() {
 fn date_ranges_and_search_metacharacters_are_literal() {
     let (_dir, mut app, token) = clinic();
     app.create_patient(&token, new_patient()).unwrap();
-    for search in ["%", "_", "' OR 1=1 --"] {
+    for search in ["%", "_", "\\", "' OR 1=1 --"] {
         let page = app
             .patients(
                 &token,
