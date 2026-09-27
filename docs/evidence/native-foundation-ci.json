@@ -1,0 +1,189 @@
+{
+  "source_commit": "bd19a3412251931f5fd1aa42ffa34a60576c3d8f",
+  "run_url": "https://github.com/skcpmx-lang/Dentiva-Pro-App/actions/runs/36299486349",
+  "run_conclusion": "success",
+  "platforms": {
+    "linux": {
+      "check_id": 108564569769,
+      "conclusion": "success",
+      "native_test_transcript": "running 18 tests\ntest activation::tests::verifier_is_isolated_argon2id ... ok\ntest money::tests::decimal_safe_half_up ... ok\ntest validation::tests::unicode_and_controls ... ok\ntest validation::tests::validates_identity_inputs ... ok\ntest money::tests::rejects_negative_overflow_and_excess_discount ... ok\ntest activation::tests::rejects_invalid_activation_without_exposing_secret ... ok\ntest workflow_tests::account_auth_version_revokes_existing_session ... ok\ntest workflow_tests::changed_migration_and_future_schema_are_refused_without_reset ... ok\ntest auth::tests::hashes_salted_argon2id ... ok\ntest workflow_tests::date_ranges_and_search_metacharacters_are_literal ... ok\ntest workflow_tests::custom_permissions_are_audited_and_cannot_escalate ... ok\ntest workflow_tests::failed_audit_rolls_back_invoice_items_and_initial_payment ... ok\ntest workflow_tests::immutable_finance_audit_and_foreign_keys ... ok\ntest workflow_tests::financial_mutations_reject_reception_direct_calls_before_validation ... ok\ntest workflow_tests::invoice_payment_idempotency_and_retained_history ... ok\ntest workflow_tests::setup_is_atomic_and_cannot_repeat ... ok\ntest workflow_tests::patient_roundtrip_search_permissions_and_lock ... ok\ntest workflow_tests::role_revocation_and_idle_expiry_take_effect_natively ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 52.11s",
+      "schema_tests_passed": 15,
+      "release_validator_tests_passed": 6
+    },
+    "windows": {
+      "check_id": 108564639666,
+      "conclusion": "success",
+      "native_test_transcript": "running 18 tests\ntest activation::tests::verifier_is_isolated_argon2id ... ok\ntest money::tests::decimal_safe_half_up ... ok\ntest money::tests::rejects_negative_overflow_and_excess_discount ... ok\ntest validation::tests::unicode_and_controls ... ok\ntest validation::tests::validates_identity_inputs ... ok\ntest activation::tests::rejects_invalid_activation_without_exposing_secret ... ok\ntest workflow_tests::account_auth_version_revokes_existing_session ... ok\ntest workflow_tests::changed_migration_and_future_schema_are_refused_without_reset ... ok\ntest auth::tests::hashes_salted_argon2id ... ok\ntest workflow_tests::custom_permissions_are_audited_and_cannot_escalate ... ok\ntest workflow_tests::date_ranges_and_search_metacharacters_are_literal ... ok\ntest workflow_tests::failed_audit_rolls_back_invoice_items_and_initial_payment ... ok\ntest workflow_tests::financial_mutations_reject_reception_direct_calls_before_validation ... ok\ntest workflow_tests::immutable_finance_audit_and_foreign_keys ... ok\ntest workflow_tests::invoice_payment_idempotency_and_retained_history ... ok\ntest workflow_tests::setup_is_atomic_and_cannot_repeat ... ok\ntest workflow_tests::patient_roundtrip_search_permissions_and_lock ... ok\ntest workflow_tests::role_revocation_and_idle_expiry_take_effect_natively ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 39.30s",
+      "schema_tests_passed": 15,
+      "release_validator_tests_passed": 6
+    }
+  },
+  "jobs": [
+    {
+      "name": "core (ubuntu-24.04)",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install pinned toolchain",
+          "conclusion": "success"
+        },
+        {
+          "name": "Validate locked dependency resolution",
+          "conclusion": "success"
+        },
+        {
+          "name": "Production migration constraints",
+          "conclusion": "success"
+        },
+        {
+          "name": "Release-gate validator tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check formatting",
+          "conclusion": "success"
+        },
+        {
+          "name": "Compile and lint native core",
+          "conclusion": "success"
+        },
+        {
+          "name": "Unit and database integration tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Publish native test transcript through Checks API",
+          "conclusion": "success"
+        },
+        {
+          "name": "Capture bootstrap lockfile and formatter patch",
+          "conclusion": "success"
+        },
+        {
+          "name": "Publish formatter patch through Checks API",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
+          "conclusion": "success"
+        },
+        {
+          "name": "Enforce formatter result",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Post Run actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "core (windows-2025)",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install pinned toolchain",
+          "conclusion": "success"
+        },
+        {
+          "name": "Validate locked dependency resolution",
+          "conclusion": "success"
+        },
+        {
+          "name": "Production migration constraints",
+          "conclusion": "success"
+        },
+        {
+          "name": "Release-gate validator tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check formatting",
+          "conclusion": "success"
+        },
+        {
+          "name": "Compile and lint native core",
+          "conclusion": "success"
+        },
+        {
+          "name": "Unit and database integration tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Publish native test transcript through Checks API",
+          "conclusion": "success"
+        },
+        {
+          "name": "Capture bootstrap lockfile and formatter patch",
+          "conclusion": "success"
+        },
+        {
+          "name": "Publish formatter patch through Checks API",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f",
+          "conclusion": "success"
+        },
+        {
+          "name": "Enforce formatter result",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Post Run actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "tested_file_sha256": {
+    ".github/workflows/native-checks.yml": "bea35f7d0ecf8950aea71bd733e25480d5c0e94efc208d7f9e25bb8d8f3f5614",
+    "Cargo.lock": "eca8b1ede8872a8c9a0728252a1764de1b9223932444c4736bcbc7661af96b3c",
+    "Cargo.toml": "aa0c040d34f135066d8b57a025e30cedc996f44b36c73d58bfa5353f2aa77926",
+    "crates/dentiva-core/Cargo.toml": "94d4bc6e37c09dc5394843aabab5a0dbbf7b9112100155320ac6005372836f1a",
+    "crates/dentiva-core/src/activation.phc": "ec1cf12ce0027068aea4a151752f533f314c07d362a31fccc2abb9fe3a959064",
+    "crates/dentiva-core/src/activation.rs": "e89a2324984deab56e60669fd20c80e7f28c5c505b31168bc24baeab0216eb98",
+    "crates/dentiva-core/src/auth.rs": "1ed2fd8f96326fb1cca12dc3201fa0c4628d695ca8c5d5610fd93772b5b130f3",
+    "crates/dentiva-core/src/db.rs": "776982019f457123a942aa09b33a4e55330bb6d7bc2387d6617e36027bc613f1",
+    "crates/dentiva-core/src/error.rs": "8cbe4bc303e23b0000cafde3a4c48db31a6670dd21a409a04bc76f53a39fbcd1",
+    "crates/dentiva-core/src/finance.rs": "2ee855b7fb818d95f1793db8e785c8ffd1b3ba4c6941937ff08c3154323675d5",
+    "crates/dentiva-core/src/lib.rs": "5f6645380c2a9da31e4d1a877e52c7c7cf95d901093cdd56346e2a18f94b7373",
+    "crates/dentiva-core/src/money.rs": "981f43481eee30ffb85743a0e112c99ab1ae5b428622f37e9b54bfbccaa6ae47",
+    "crates/dentiva-core/src/patients.rs": "1ac513285ede10063ac952d55f139cc5581b02b0f167a2f138e1a7eadcb37cde",
+    "crates/dentiva-core/src/roles.rs": "71e20ae42c9bc3908338d75a5cbef3959ac46620ef5ede201d0e2a9d40d2e917",
+    "crates/dentiva-core/src/setup.rs": "71e670f26e540d4bfd4334fea44f041f3e4708c3fa6b4822304eeec8a4eb7076",
+    "crates/dentiva-core/src/validation.rs": "623c6bdd45209fa5a6ab5dadf53a0f741beda439b59f15044b9faea687a80235",
+    "crates/dentiva-core/src/workflow_tests.rs": "8573c71e05f1d0cf187d66c2443333d71917a838179dabd403397d9995e1cd7d",
+    "rust-toolchain.toml": "474342a18df37f923f59df43b1b90e6c0b0d6758612462bbc0dadbe37fe2cadf",
+    "scripts/publish_ci_evidence.py": "1dc1e8ce737cac24d91761c582e23571a84b5aaf23555d1dccc037b299e52f47",
+    "scripts/release_gate.py": "07b12887ce9adb95fbd0ec523f6141b7cbd975fbfd5d72a6e98ace396e540e63",
+    "src-tauri/migrations/0001_foundation.sql": "ccaeff3468d823420bc10f0513d5d78fd40eae5f6fb3c8e91a192986b19b1d82",
+    "tests/integration/test_schema.py": "45db4dded8ac6306610b274c3e6675afb60db1f659ffc50e024be4777bcc7bd3",
+    "tests/performance/benchmark_schema.py": "0427f1b4d55c417c19c4a155c8ad0b6450adf7feb7dc24e10b907494ece1309d",
+    "tests/unit/test_release_gate.py": "be3297f986d8f21cfb7d1b246898a222eb81e263524b60799c0055febc848c55"
+  }
+}

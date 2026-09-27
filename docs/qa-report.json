@@ -1,0 +1,298 @@
+{
+  "report_kind": "ENGINEERING_CHECKPOINT_NOT_RELEASE_CERTIFICATION",
+  "version": "0.1.0",
+  "target_commercial_version": "1.0.0",
+  "schema_version": 1,
+  "release_tag": null,
+  "source_commit": "bd19a3412251931f5fd1aa42ffa34a60576c3d8f",
+  "release_readiness": "BLOCKED",
+  "tests": {
+    "passed": 39,
+    "failed": 0,
+    "skipped": 0,
+    "count_scope": "39 implemented tests per CI platform; 78 instances across Linux and Windows. Unimplemented acceptance groups are not counted as passing tests."
+  },
+  "native_ci": {
+    "url": "https://github.com/skcpmx-lang/Dentiva-Pro-App/actions/runs/36299486349",
+    "status": "PASS",
+    "evidence_path": "docs/evidence/native-foundation-ci.json",
+    "sha256": "40f40ab970b4c710d941de1c3e6585380dba6ce6d299991793c2b4a2c94366b3"
+  },
+  "sql_benchmark": {
+    "scope": "SQL-only, not whole-product performance certification",
+    "patients_and_contacts_each": [
+      1000,
+      10000,
+      50000,
+      100000
+    ],
+    "evidence_path": "docs/evidence/schema-benchmark.json",
+    "sha256": "06baa2dc38f4cb890e68ecc33e3315f05e585d9328c782aeecc2aeb0ece6277f"
+  },
+  "gates": {
+    "BUILD": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "LINT": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "TYPECHECK": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "UNIT": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "INTEGRATION": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "E2E": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "DATABASE_INTEGRITY": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "SECURITY": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "RBAC": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "PRINT": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "PDF": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "BANGLA_UNICODE": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "BACKUP": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "RESTORE": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "ATTACHMENTS": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "INSTALLER": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "CLEAN_MACHINE": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "PERFORMANCE": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "HIGH_DPI": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "LICENSE_AUDIT": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "UI_UX_AUDIT": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "NO_FAKE_FEATURES": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "NO_TODO": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "SECRET_SCAN": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "DESTRUCTIVE_ACTIONS": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    },
+    "RELEASE_ARTIFACT": {
+      "status": "NOT_RUN",
+      "reason": "Full-product scope/evidence incomplete; foundation checks do not satisfy this release gate."
+    }
+  },
+  "requirements": {
+    "R001": "PASS",
+    "R002": "NOT_RUN",
+    "R003": "NOT_RUN",
+    "R004": "NOT_RUN",
+    "R005": "NOT_RUN",
+    "R006": "NOT_RUN",
+    "R007": "NOT_RUN",
+    "R008": "NOT_RUN",
+    "R009": "NOT_RUN",
+    "R010": "NOT_RUN",
+    "R011": "NOT_RUN",
+    "R012": "NOT_RUN",
+    "R013": "NOT_RUN",
+    "R014": "NOT_RUN",
+    "R015": "NOT_RUN",
+    "R016": "NOT_RUN",
+    "R017": "NOT_RUN",
+    "R018": "NOT_RUN",
+    "R019": "NOT_RUN",
+    "R020": "NOT_RUN",
+    "R021": "NOT_RUN",
+    "R022": "NOT_RUN",
+    "R023": "NOT_RUN",
+    "R024": "NOT_RUN",
+    "R025": "NOT_RUN",
+    "R026": "NOT_RUN",
+    "R027": "NOT_RUN",
+    "R028": "NOT_RUN",
+    "R029": "NOT_RUN",
+    "R030": "NOT_RUN",
+    "R031": "NOT_RUN",
+    "R032": "NOT_RUN",
+    "R033": "NOT_RUN",
+    "R034": "NOT_RUN",
+    "R035": "NOT_RUN",
+    "R036": "NOT_RUN",
+    "R037": "NOT_RUN",
+    "R038": "NOT_RUN",
+    "R039": "NOT_RUN",
+    "R040": "NOT_RUN",
+    "R041": "NOT_RUN",
+    "R042": "NOT_RUN",
+    "R043": "NOT_RUN",
+    "R044": "NOT_RUN",
+    "R045": "NOT_RUN",
+    "R046": "NOT_RUN",
+    "R047": "NOT_RUN",
+    "R048": "NOT_RUN",
+    "R049": "NOT_RUN",
+    "R050": "NOT_RUN",
+    "R051": "NOT_RUN",
+    "R052": "NOT_RUN",
+    "R053": "NOT_RUN",
+    "R054": "NOT_RUN",
+    "R055": "NOT_RUN",
+    "R056": "NOT_RUN",
+    "R057": "NOT_RUN",
+    "R058": "NOT_RUN",
+    "R059": "NOT_RUN",
+    "R060": "NOT_RUN",
+    "R061": "NOT_RUN",
+    "R062": "NOT_RUN",
+    "R063": "NOT_RUN",
+    "R064": "NOT_RUN",
+    "R065": "NOT_RUN",
+    "R066": "NOT_RUN",
+    "R067": "NOT_RUN",
+    "R068": "NOT_RUN",
+    "R069": "NOT_RUN",
+    "R070": "NOT_RUN",
+    "R071": "NOT_RUN",
+    "R072": "NOT_RUN",
+    "R073": "NOT_RUN",
+    "R074": "NOT_RUN",
+    "R075": "NOT_RUN",
+    "R076": "NOT_RUN",
+    "R077": "NOT_RUN",
+    "R078": "NOT_RUN",
+    "R079": "NOT_RUN",
+    "R080": "NOT_RUN",
+    "R081": "NOT_RUN",
+    "R082": "NOT_RUN",
+    "R083": "NOT_RUN",
+    "R084": "NOT_RUN",
+    "R085": "NOT_RUN",
+    "R086": "NOT_RUN",
+    "R087": "NOT_RUN",
+    "R088": "NOT_RUN",
+    "R089": "NOT_RUN",
+    "R090": "NOT_RUN",
+    "R091": "NOT_RUN",
+    "R092": "NOT_RUN",
+    "R093": "NOT_RUN",
+    "R094": "NOT_RUN",
+    "R095": "NOT_RUN",
+    "R096": "NOT_RUN",
+    "R097": "NOT_RUN",
+    "R098": "NOT_RUN",
+    "R099": "NOT_RUN",
+    "R100": "NOT_RUN",
+    "R101": "NOT_RUN",
+    "R102": "NOT_RUN",
+    "R103": "NOT_RUN",
+    "R104": "NOT_RUN",
+    "R105": "NOT_RUN",
+    "R106": "NOT_RUN",
+    "R107": "NOT_RUN",
+    "R108": "NOT_RUN",
+    "R109": "NOT_RUN",
+    "R110": "NOT_RUN",
+    "R111": "NOT_RUN",
+    "R112": "NOT_RUN",
+    "R113": "NOT_RUN",
+    "R114": "NOT_RUN",
+    "R115": "NOT_RUN",
+    "R116": "NOT_RUN",
+    "R117": "NOT_RUN",
+    "R118": "NOT_RUN",
+    "R119": "NOT_RUN",
+    "R120": "NOT_RUN",
+    "R121": "NOT_RUN",
+    "R122": "NOT_RUN",
+    "R123": "NOT_RUN",
+    "R124": "NOT_RUN",
+    "R125": "NOT_RUN",
+    "R126": "NOT_RUN",
+    "R127": "NOT_RUN",
+    "R128": "NOT_RUN",
+    "R129": "NOT_RUN",
+    "R130": "NOT_RUN",
+    "R131": "NOT_RUN",
+    "R132": "NOT_RUN",
+    "R133": "NOT_RUN",
+    "R134": "NOT_RUN",
+    "R135": "NOT_RUN",
+    "R136": "NOT_RUN",
+    "R137": "NOT_RUN",
+    "R138": "NOT_RUN",
+    "R139": "NOT_RUN",
+    "R140": "NOT_RUN",
+    "R141": "NOT_RUN",
+    "R142": "NOT_RUN",
+    "R143": "NOT_RUN",
+    "R144": "NOT_RUN",
+    "R145": "NOT_RUN",
+    "R146": "NOT_RUN",
+    "R147": "NOT_RUN"
+  },
+  "findings": {
+    "critical": null,
+    "high": null,
+    "security": "Full product security review not performed; encryption/coordinator absent.",
+    "dependencies": "Advisory and redistribution audit outstanding.",
+    "licenses": "Full inventory and third-party notices outstanding."
+  },
+  "artifact": null,
+  "installer_status": "NOT_BUILT",
+  "github_release_status": "NOT_PUBLISHED",
+  "fallback_status": "NO_INSTALLER_AVAILABLE"
+}
