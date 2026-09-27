@@ -65,7 +65,7 @@ jobs:
         if: always() && steps.format.outcome != 'success'
         run: exit 1
   bootstrap:
-    if: github.event_name == 'workflow_dispatch' && inputs.bootstrap_lockfile && github.ref == 'refs/heads/arena/01a0e166-dentiva-pro-app'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/arena/01a0e166-dentiva-pro-app'
     runs-on: ubuntu-24.04
     permissions:
       contents: write
