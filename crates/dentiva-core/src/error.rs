@@ -33,7 +33,10 @@ impl From<rusqlite::Error> for Error {
         match value {
             rusqlite::Error::QueryReturnedNoRows => Self::NotFound,
             rusqlite::Error::SqliteFailure(ref e, _)
-                if e.code == rusqlite::ErrorCode::ConstraintViolation => Self::Conflict,
+                if e.code == rusqlite::ErrorCode::ConstraintViolation =>
+            {
+                Self::Conflict
+            }
             _ => Self::Storage,
         }
     }

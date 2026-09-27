@@ -3,7 +3,8 @@ use crate::auth;
 /// A fixed offline secret resists casual string searches, not binary reverse engineering.
 /// Receipt persistence and device binding belong to the native Windows installation layer.
 pub fn verify_activation(input: &str) -> bool {
-    input.len() == 16 && input.bytes().all(|b| b.is_ascii_digit())
+    input.len() == 16
+        && input.bytes().all(|b| b.is_ascii_digit())
         && auth::verify(input, include_str!("activation.phc").trim())
 }
 

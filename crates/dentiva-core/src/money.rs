@@ -33,10 +33,13 @@ pub fn calculate_line(line: &InvoiceLine) -> Result<LineAmounts> {
     {
         return Err(invalid("Enter valid quantities, prices, discount and tax."));
     }
-    let subtotal = (i128::from(line.unit_price_poisha) * i128::from(line.quantity_milli) + 500) / 1000;
+    let subtotal =
+        (i128::from(line.unit_price_poisha) * i128::from(line.quantity_milli) + 500) / 1000;
     let net = subtotal - i128::from(line.discount_poisha);
     if net < 0 || subtotal > i128::from(MAX_MONEY) {
-        return Err(invalid("The discount exceeds the price or the amount is too large."));
+        return Err(invalid(
+            "The discount exceeds the price or the amount is too large.",
+        ));
     }
     let tax = (net * i128::from(line.tax_basis_points) + 5000) / 10000;
     let total = net + tax;
@@ -57,7 +60,8 @@ pub fn invoice_total(lines: &[InvoiceLine]) -> Result<i64> {
     }
     let mut sum = 0_i64;
     for line in lines {
-        sum = sum.checked_add(calculate_line(line)?.total_poisha)
+        sum = sum
+            .checked_add(calculate_line(line)?.total_poisha)
             .filter(|value| *value <= MAX_MONEY)
             .ok_or_else(|| invalid("The invoice total is too large."))?;
     }
@@ -71,22 +75,42 @@ pub fn invoice_total(lines: &[InvoiceLine]) -> Result<i64> {
 mod tests {
     use super::*;
     fn line(price: i64, quantity: i64, discount: i64, tax: i64) -> InvoiceLine {
-        InvoiceLine { description: "Service".into(), quantity_milli: quantity,
-            unit_price_poisha: price, discount_poisha: discount, tax_basis_points: tax }
+        InvoiceLine {
+            description: "Service".into(),
+            quantity_milli: quantity,
+            unit_price_poisha: price,
+            discount_poisha: discount,
+            tax_basis_points: tax,
+        }
     }
     #[test]
     fn decimal_safe_half_up() {
-        assert_eq!(calculate_line(&line(101, 500, 0, 0)).unwrap().total_poisha, 51);
-        assert_eq!(calculate_line(&line(10_000, 2000, 500, 500)).unwrap(), LineAmounts {
-            subtotal_poisha: 20_000, discount_poisha: 500, tax_poisha: 975, total_poisha: 20_475 });
+        assert_eq!(
+            calculate_line(&line(101, 500, 0, 0)).unwrap().total_poisha,
+            51
+        );
+        assert_eq!(
+            calculate_line(&line(10_000, 2000, 500, 500)).unwrap(),
+            LineAmounts {
+                subtotal_poisha: 20_000,
+                discount_poisha: 500,
+                tax_poisha: 975,
+                total_poisha: 20_475
+            }
+        );
     }
     #[test]
     fn rejects_negative_overflow_and_excess_discount() {
-        for input in [line(-1,1000,0,0), line(1,-1,0,0), line(1,1000,2,0),
-            line(MAX_MONEY,1_000_000_000,0,0), line(MAX_MONEY,1000,0,1)] {
+        for input in [
+            line(-1, 1000, 0, 0),
+            line(1, -1, 0, 0),
+            line(1, 1000, 2, 0),
+            line(MAX_MONEY, 1_000_000_000, 0, 0),
+            line(MAX_MONEY, 1000, 0, 1),
+        ] {
             assert!(calculate_line(&input).is_err());
         }
         assert!(invoice_total(&[]).is_err());
-        assert!(invoice_total(&[line(MAX_MONEY,1000,0,0), line(1,1000,0,0)]).is_err());
+        assert!(invoice_total(&[line(MAX_MONEY, 1000, 0, 0), line(1, 1000, 0, 0)]).is_err());
     }
 }
