@@ -19,3 +19,10 @@
 - Root cause: the fixture subtracted 601 seconds from `Instant::now()`. On a newly booted Windows runner the monotonic clock had less than that uptime, and the test panicked before calling authorization.
 - Fix: set the private test session's idle duration to zero, then assert native authorization expires it. Production policy remains validated at 5/10/15/30 minutes; no production clock or authentication bypass was added.
 - Regression: same native revocation/expiry test on both actual runner operating systems. Never classify the Windows failure as a skip or a product PASS before rerun.
+
+## PERF-001 — Newest patient list sorted timestamp ties unnecessarily
+- Discovery: SQL-only benchmark at 1k/10k/50k/100k patients+contacts, on the actual production list/count query extracted from Rust source.
+- Root cause: list order is `(registered_at DESC, id DESC)`, but the index ended in ascending `id`; a heavily tied timestamp fixture required a temporary sort. Baseline 100k warm p95 newest page/count: 278.623ms on the authoring host.
+- Fix: index direction now matches the complete deterministic list ordering.
+- Regression: `test_newest_page_uses_order_covering_index` asserts use of the index and absence of a temporary sorting B-tree. Disposable 100k benchmark rerun saved in `docs/evidence/schema-benchmark.json`, including query plans and integrity/foreign-key checks.
+- Scope: SQL-only timing on this Linux host, NOT full application/reference-Windows-hardware performance certification. 100k clinical/financial/attachment/native-rendering workloads remain mandatory.

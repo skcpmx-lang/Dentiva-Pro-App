@@ -73,7 +73,7 @@ CREATE TABLE patients (
     updated_at TEXT NOT NULL
 ) STRICT;
 CREATE INDEX idx_patients_name ON patients(name COLLATE NOCASE,id);
-CREATE INDEX idx_patients_registered ON patients(registered_at DESC,id);
+CREATE INDEX idx_patients_registered ON patients(registered_at DESC,id DESC);
 CREATE INDEX idx_patients_dentist ON patients(assigned_dentist_id);
 CREATE INDEX idx_patients_actor ON patients(registered_by);
 CREATE TABLE patient_contacts (

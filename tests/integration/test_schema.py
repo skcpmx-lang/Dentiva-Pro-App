@@ -43,6 +43,12 @@ class SchemaTests(unittest.TestCase):
         self.assertEqual(self.db.execute('PRAGMA foreign_key_check').fetchall(), [])
         self.assertEqual(self.db.execute("SELECT name FROM patients WHERE id='p'").fetchone()[0], 'রোগীর নাম')
 
+    def test_newest_page_uses_order_covering_index(self):
+        plan = self.db.execute("EXPLAIN QUERY PLAN SELECT id,code FROM patients WHERE status='Active' ORDER BY registered_at DESC,id DESC LIMIT 50").fetchall()
+        text = ' '.join(row[3] for row in plan)
+        self.assertIn('idx_patients_registered', text)
+        self.assertNotIn('TEMP B-TREE', text)
+
     def test_unique_codes_and_foreign_keys(self):
         with self.assertRaises(sqlite3.IntegrityError):
             self.patient('new', 'DP-1')

@@ -1,0 +1,275 @@
+{
+  "scope": "Actual demographic list SQL extracted from native source; not full application performance",
+  "environment": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "logical_cpus": 2,
+    "sqlite_version": "3.40.1"
+  },
+  "measurements": [
+    {
+      "patients": 1000,
+      "contacts": 1000,
+      "incremental_load_ms": 18.511,
+      "integrity": "ok",
+      "foreign_key_violations": 0,
+      "scenarios": [
+        {
+          "name": "newest_page",
+          "matched_rows": 1000,
+          "page_limit": 50,
+          "first_query_ms": 0.78,
+          "warm_median_ms": 0.482,
+          "warm_p95_ms": 0.648,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        },
+        {
+          "name": "name_search",
+          "matched_rows": 1,
+          "page_limit": 50,
+          "first_query_ms": 2.741,
+          "warm_median_ms": 2.683,
+          "warm_p95_ms": 2.879,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        },
+        {
+          "name": "phone_search",
+          "matched_rows": 1,
+          "page_limit": 50,
+          "first_query_ms": 2.426,
+          "warm_median_ms": 2.312,
+          "warm_p95_ms": 2.361,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        }
+      ]
+    },
+    {
+      "patients": 10000,
+      "contacts": 10000,
+      "incremental_load_ms": 161.466,
+      "integrity": "ok",
+      "foreign_key_violations": 0,
+      "scenarios": [
+        {
+          "name": "newest_page",
+          "matched_rows": 10000,
+          "page_limit": 50,
+          "first_query_ms": 1.874,
+          "warm_median_ms": 1.163,
+          "warm_p95_ms": 1.355,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        },
+        {
+          "name": "name_search",
+          "matched_rows": 1,
+          "page_limit": 50,
+          "first_query_ms": 22.744,
+          "warm_median_ms": 27.151,
+          "warm_p95_ms": 43.157,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        },
+        {
+          "name": "phone_search",
+          "matched_rows": 1,
+          "page_limit": 50,
+          "first_query_ms": 22.824,
+          "warm_median_ms": 22.875,
+          "warm_p95_ms": 23.07,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        }
+      ]
+    },
+    {
+      "patients": 50000,
+      "contacts": 50000,
+      "incremental_load_ms": 705.693,
+      "integrity": "ok",
+      "foreign_key_violations": 0,
+      "scenarios": [
+        {
+          "name": "newest_page",
+          "matched_rows": 50000,
+          "page_limit": 50,
+          "first_query_ms": 6.912,
+          "warm_median_ms": 6.378,
+          "warm_p95_ms": 7.53,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        },
+        {
+          "name": "name_search",
+          "matched_rows": 1,
+          "page_limit": 50,
+          "first_query_ms": 122.754,
+          "warm_median_ms": 123.068,
+          "warm_p95_ms": 125.123,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        },
+        {
+          "name": "phone_search",
+          "matched_rows": 1,
+          "page_limit": 50,
+          "first_query_ms": 125.062,
+          "warm_median_ms": 124.847,
+          "warm_p95_ms": 150.581,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        }
+      ]
+    },
+    {
+      "patients": 100000,
+      "contacts": 100000,
+      "incremental_load_ms": 1926.693,
+      "integrity": "ok",
+      "foreign_key_violations": 0,
+      "scenarios": [
+        {
+          "name": "newest_page",
+          "matched_rows": 100000,
+          "page_limit": 50,
+          "first_query_ms": 13.722,
+          "warm_median_ms": 13.004,
+          "warm_p95_ms": 13.314,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        },
+        {
+          "name": "name_search",
+          "matched_rows": 1,
+          "page_limit": 50,
+          "first_query_ms": 262.267,
+          "warm_median_ms": 257.382,
+          "warm_p95_ms": 287.708,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        },
+        {
+          "name": "phone_search",
+          "matched_rows": 1,
+          "page_limit": 50,
+          "first_query_ms": 268.357,
+          "warm_median_ms": 250.043,
+          "warm_p95_ms": 258.964,
+          "query_plan": [
+            "SCAN p USING INDEX idx_patients_registered",
+            "CORRELATED SCALAR SUBQUERY 4",
+            "SEARCH c USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=?)",
+            "CORRELATED SCALAR SUBQUERY 1",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 2",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)",
+            "CORRELATED SCALAR SUBQUERY 3",
+            "SEARCH patient_contacts USING INDEX sqlite_autoindex_patient_contacts_2 (patient_id=? AND kind=?)"
+          ]
+        }
+      ]
+    }
+  ]
+}
